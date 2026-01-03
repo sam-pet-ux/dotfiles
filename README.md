@@ -230,11 +230,12 @@ The archive is safe to commit (encrypted), and `yadm decrypt` restores the files
 
 ### Secret Protection
 
-Two layers prevent accidental secret exposure:
+Three layers of protection for sensitive data:
 
 | Layer | Mechanism | Purpose |
 |-------|-----------|---------|
-| **Pre-commit hook** | gitleaks scans staged files | Blocks commits containing secrets |
+| **GPG Encryption** | `yadm encrypt` | Securely sync intentional secrets (SSH keys, tokens) |
+| **Pre-commit hook** | gitleaks scans staged files | Blocks commits containing accidental secrets |
 | **Gitignore** | 30+ patterns | Prevents tracking sensitive file types |
 
 If you accidentally stage a file with a secret:
@@ -246,7 +247,11 @@ If you accidentally stage a file with a secret:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**False positive?** Add pattern to `~/.config/yadm/gitleaks.toml`
+**Options when blocked:**
+1. Remove the secret from the file
+2. Add file to `~/.config/yadm/encrypt` (for intentional secrets)
+3. Add pattern to `~/.config/yadm/gitleaks.toml` (if false positive)
+4. `yadm commit --no-verify` (bypass - use with caution)
 
 ---
 
