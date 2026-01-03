@@ -1,0 +1,52 @@
+# =============================================================================
+# gitleaks configuration for yadm dotfiles
+# =============================================================================
+# Reduces false positives when scanning dotfiles.
+# Used by pre-commit hook: ~/.config/yadm/hooks/pre_commit
+# =============================================================================
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Dotfiles false positives"
+
+# Files that commonly trigger false positives
+paths = [
+    '''lazy-lock\.json$''',
+    '''package\.toml$''',
+    '''package-lock\.json$''',
+    '''Brewfile\.lock\.json$''',
+    '''\.config/gh/hosts\.yml$''',
+]
+
+# Patterns that are not real secrets
+regexes = [
+    # Placeholder values
+    '''YOUR_API_KEY_HERE''',
+    '''your-api-key''',
+    '''your_api_key''',
+    '''<API_KEY>''',
+    '''REPLACE_ME''',
+    '''xxx+''',
+    '''yyy+''',
+    '''zzz+''',
+
+    # Hex color codes (6 chars)
+    '''#[0-9a-fA-F]{6}''',
+
+    # Example/localhost domains
+    '''example\.com''',
+    '''localhost''',
+    '''127\.0\.0\.1''',
+
+    # Common config placeholders
+    '''sk-\.\.\.''',
+    '''pk_test_''',
+    '''sk_test_''',
+]
+
+# Specific commits to ignore (add if needed)
+# commits = [
+#     "abc123...",
+# ]

@@ -1,0 +1,50 @@
+#!/bin/bash
+# =============================================================================
+# yadm pre-commit hook - Secret scanning with gitleaks
+# =============================================================================
+# Scans staged files for secrets before allowing commit.
+# Blocks commit if secrets are detected.
+#
+# To bypass (use sparingly): yadm commit --no-verify
+# =============================================================================
+
+set -euo pipefail
+
+# Skip if gitleaks not installed
+if ! command -v gitleaks &>/dev/null; then
+    echo "[pre-commit] gitleaks not installed, skipping secret scan"
+    echo "             Install with: brew install gitleaks"
+    exit 0
+fi
+
+# Path to gitleaks config (if exists)
+GITLEAKS_CONFIG="$HOME/.config/yadm/gitleaks.toml"
+
+echo "[pre-commit] Scanning for secrets..."
+
+# Build gitleaks command
+GITLEAKS_CMD="gitleaks protect --staged --verbose --redact --exit-code 1"
+
+# Add config if it exists
+if [[ -f "$GITLEAKS_CONFIG" ]]; then
+    GITLEAKS_CMD="$GITLEAKS_CMD --config=$GITLEAKS_CONFIG"
+fi
+
+# Run gitleaks
+if eval "$GITLEAKS_CMD"; then
+    echo "[pre-commit] No secrets detected"
+    exit 0
+else
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "❌ SECRET DETECTED - Commit blocked"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    echo "Options:"
+    echo "  1. Remove the secret from the file"
+    echo "  2. Add file to ~/.config/yadm/encrypt (for intentional secrets)"
+    echo "  3. Add pattern to ~/.config/yadm/gitleaks.toml (if false positive)"
+    echo "  4. yadm commit --no-verify (bypass - use with caution)"
+    echo ""
+    exit 1
+fi
