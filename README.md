@@ -228,6 +228,26 @@ Sensitive files are GPG-encrypted into a single archive:
 
 The archive is safe to commit (encrypted), and `yadm decrypt` restores the files.
 
+### Secret Protection
+
+Two layers prevent accidental secret exposure:
+
+| Layer | Mechanism | Purpose |
+|-------|-----------|---------|
+| **Pre-commit hook** | gitleaks scans staged files | Blocks commits containing secrets |
+| **Gitignore** | 30+ patterns | Prevents tracking sensitive file types |
+
+If you accidentally stage a file with a secret:
+
+```
+[pre-commit] Scanning for secrets...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❌ SECRET DETECTED - Commit blocked
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**False positive?** Add pattern to `~/.config/yadm/gitleaks.toml`
+
 ---
 
 ## File Structure
@@ -246,7 +266,9 @@ The archive is safe to commit (encrypted), and `yadm decrypt` restores the files
 │   └── yadm/
 │       ├── bootstrap          # New machine setup
 │       ├── encrypt            # Patterns for secrets
-│       └── gitignore          # Never-track patterns
+│       ├── gitignore          # Never-track patterns
+│       ├── gitleaks.toml      # False positive allowlist
+│       └── hooks/pre_commit   # Secret scanning hook
 ├── .gnupg/gpg-agent.conf
 ├── .local/
 │   ├── bin/
@@ -274,6 +296,9 @@ Essential tools installed by bootstrap:
 - `fd` - better find
 - `ripgrep` - better grep
 - `neovim` - editor
+
+Optional but recommended:
+- `gitleaks` - secret scanning (`brew install gitleaks`)
 
 ---
 
