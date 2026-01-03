@@ -110,6 +110,67 @@ echo "[OK] Alternates created"
 echo ""
 
 # -----------------------------------------------------------------------------
+# SETUP AUTO-SYNC (primary machine only)
+# -----------------------------------------------------------------------------
+
+if [[ "$HOSTNAME" == "$PRIMARY_HOSTNAME" ]] && [[ "$OS" == "Darwin" ]]; then
+    echo "Setting up auto-sync..."
+
+    PLIST_NAME="com.yadm.autosync.plist"
+    PLIST_PATH="$HOME/Library/LaunchAgents/$PLIST_NAME"
+    SYNC_SCRIPT="$HOME/.local/bin/yadm-auto-sync.sh"
+
+    # Create launchd plist if it doesn't exist
+    if [[ ! -f "$PLIST_PATH" ]] && [[ -f "$SYNC_SCRIPT" ]]; then
+        mkdir -p "$HOME/Library/LaunchAgents"
+        cat > "$PLIST_PATH" << 'PLIST'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.yadm.autosync</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-l</string>
+        <string>-c</string>
+        <string>$HOME/.local/bin/yadm-auto-sync.sh</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>3600</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>Nice</key>
+    <integer>10</integer>
+    <key>StandardOutPath</key>
+    <string>/tmp/yadm-auto-sync.stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/yadm-auto-sync.stderr.log</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+</dict>
+</plist>
+PLIST
+        # Replace $HOME with actual path
+        sed -i '' "s|\$HOME|$HOME|g" "$PLIST_PATH"
+        echo "  [OK] Created launchd plist"
+    fi
+
+    # Load the agent if not already running
+    if ! launchctl list | grep -q "com.yadm.autosync"; then
+        launchctl load "$PLIST_PATH" 2>/dev/null || true
+        echo "  [OK] Loaded auto-sync agent (runs hourly)"
+    else
+        echo "  [OK] Auto-sync agent already running"
+    fi
+    echo ""
+fi
+
+# -----------------------------------------------------------------------------
 # SUMMARY
 # -----------------------------------------------------------------------------
 
@@ -120,12 +181,18 @@ echo "  1. Open a new terminal or run: source ~/.zshrc"
 echo "  2. Check status: yadm status"
 
 MACHINE_CLASS=$(yadm config local.class)
-if [[ "$MACHINE_CLASS" == "secondary" ]]; then
+if [[ "$MACHINE_CLASS" == "primary" ]]; then
+    echo ""
+    echo "This is the PRIMARY machine:"
+    echo "  - Auto-sync runs hourly (launchd agent)"
+    echo "  - Changes are automatically committed and pushed"
+    echo "  - Check sync log: cat ~/.local/share/yadm/auto-sync.log"
+elif [[ "$MACHINE_CLASS" == "secondary" ]]; then
     echo ""
     echo "This is a SECONDARY machine:"
     echo "  - Push is disabled (changes stay local)"
     echo "  - To update from remote: yadm pull"
-    echo "  - To enable push: yadm remote set-url --push origin git@github.com:alexfazio/dotfiles.git"
+    echo "  - To enable push: yadm remote set-url --push origin https://github.com/alexfazio/dotfiles.git"
 fi
 
 if [[ -f "$ARCHIVE" ]]; then
